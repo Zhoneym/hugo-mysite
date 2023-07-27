@@ -1,0 +1,31 @@
+baseURL = 'https://Zhoneym.github.io'
+languageCode = 'zh-CN'
+title = '小饼干的学习笔记'
+theme = "maupassant"
+
+[params]
+	localSearch = true
+	subtitle = "C++ 开发者，专注于开源项目与软件架构"
+
+[author]
+	name = "Zhoneym"
+
+
+[markup]
+	[markup.highlight]
+		lineNos = true
+		style = "github"
+    
+[menu]
+
+	[[menu.main]]
+		identifier = "archives"
+		name = "归档"
+		url = "/archives/"
+		weight = 2
+
+	[[menu.main]]
+		identifier = "about"
+		name = "关于"
+		url = "/about/"
+		weight = 3
