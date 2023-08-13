@@ -28,7 +28,12 @@ EOF
 
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y
-sudo apt-get install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git git-lfs gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev cmake clang lldb neofetch python-is-python3 libwxgtk3.0-gtk3-dev python3-protobuf brotli
+sudo apt-get install -y bc bison build-essential ccache curl flex \
+g++-multilib gcc-multilib git git-lfs gnupg gperf imagemagick lib32ncurses5-dev \  
+lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libncurses5 libncurses5-dev \
+libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool \
+squashfs-tools xsltproc zip zlib1g-dev cmake clang lldb neofetch python-is-python3 \
+libwxgtk3.0-gtk3-dev python3-protobuf brotli
 ```
 
 ## 安装 OpenJDK
