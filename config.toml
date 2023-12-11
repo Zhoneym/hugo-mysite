@@ -5,7 +5,7 @@ theme = "maupassant"
 
 [params]
 	localSearch = true
-	subtitle = "C++ 开发者，专注于开源项目与软件架构"
+	subtitle = "Linux 运维测试，专注于开源项目与软件架构"
 
 [author]
 	name = "Zhoneym"
