@@ -1,5 +1,5 @@
 ---
-title: "从 Oracle WebLogic 集群搭建应用部署到压力测试" 
+title: "WebLogic 集群搭建 应用部署再到压力测试" 
 date: 2023-12-31T14:58:25+08:00
 draft: false
 ---
