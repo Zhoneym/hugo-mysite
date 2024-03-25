@@ -1,0 +1,47 @@
+baseURL = 'https://Zhoneym.github.io'
+languageCode = 'zh-CN'
+title = '小饼干的学习笔记'
+theme = "maupassant"
+
+[params]
+	localSearch = true
+	busuanzi = true
+	subtitle = "Linux 运维测试，专注于开源项目与软件架构"
+	[params.utteranc]
+		enable = true
+		repo = "Zhoneym/hugo-mysite"
+		issueTerm = "pathname"
+		theme = "github-light"
+	[params.cc]
+		name = "知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议"
+		link = "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+
+[author]
+	name = "Zhoneym"
+
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    hl_Lines = ""
+    lineNoStart = 1
+    lineNos = true
+    lineNumbersInTable = false
+    noClasses = true
+    style = "colorful"
+    tabWidth = 4
+    
+[menu]
+
+	[[menu.main]]
+		identifier = "archives"
+		name = "归档"
+		url = "/archives/"
+		weight = 2
+
+	[[menu.main]]
+		identifier = "about"
+		name = "关于"
+		url = "/about/"
+		weight = 3
