@@ -15,9 +15,9 @@ VMWare Workstations 17 有针对  HypervisorType-1 侧通道缓解措施但效�
 bcdedit /set hypervisorlaunchtype off
 ```
 
-# 安装 Hyper-V 虚拟机环境（可选，对于 WSL 2 和 Android 子系统 用户）
+## 安装 Hyper-V 虚拟机环境（可选，对于 WSL 2 和 Android 子系统 用户）
 
-## 通过“设置”启用 Hyper-V 角色
+### 通过“设置”启用 Hyper-V 角色
 
 右键单击 Windows 按钮 设置 —— 应用 —— 可选功能 ——更多 Windows 功能。
 
@@ -29,17 +29,17 @@ bcdedit /set hypervisorlaunchtype off
 
 选择“Windows 虚拟化平台”，然后单击“确定”。（针对 WSL 2 和 Android 子系统 用户）
 
-## 或使用 DISM 启用 Hyper-V
+### 或使用 DISM 启用 Hyper-V
 
 ```powershell
 Dism /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
 ```
 
-# Linux 虚拟机环境的安装
+## Linux 虚拟机环境的安装
 
 因为要以文档的形式呈现本操作题目，Ubuntu 或者 Deban 图形化操作界面没什么可说的，所以本次采用 Arch Linux 以控制台输入 bash/zsh 命令的方式去安装一个虚拟机。
 
-## 创建虚拟机
+### 创建虚拟机
 
 | 硬件配置                                      | 规格                                                         |
 | --------------------------------------------- | ------------------------------------------------------------ |
@@ -54,13 +54,13 @@ Dism /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
 | 芯片组                                        | 默认                                                         |
 | 启动类型                                      | UEFI                                                         |
 
-## DVD 启动光盘镜像文件
+### DVD 启动光盘镜像文件
 
 Arch Linux 2023.12
 
 https://mirrors.tuna.tsinghua.edu.cn/archlinux/iso/latest/archlinux-2023.12.01-x86_64.iso  (清华大学开源软件镜像站)
 
-## 配置 SSH 连接（可选）
+### 配置 SSH 连接（可选）
 
 开机进入 CLI 安装模式会自动以 root 模式登录，Arch Linux LiveDVD 的 root 密码为随机字符串，配置 SSH 时应配置为：
 
@@ -85,14 +85,14 @@ PS C:\Users\Administrator>ssh root@192.168.1.5
 yes
 ```
 
-## 网络连通性测试
+### 网络连通性测试
 
 ```bash
 ipaddr
 ping -c4 www.163.com
 ```
 
-## 确定安装源刷新软件仓库密钥
+### 确定安装源刷新软件仓库密钥
 
 ```bash
 echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
@@ -102,7 +102,7 @@ pacman -S --noconfirm wget -y
 pacman -S --noconfirm archlinux-keyring -y
 ```
 
-## 增强软件包管理器下载软件包的稳定性
+### 增强软件包管理器下载软件包的稳定性
 
 ```bash
 vim /etc/pacman.conf
@@ -114,7 +114,7 @@ ParallelDownloads = 8
 :wq!
 ```
 
-## 分区规划
+### 分区规划
 
 创建分区并保持退出
 
@@ -138,26 +138,26 @@ mount /dev/nvme0n1p1 /mnt/boot/
 mount /dev/nvme0n1p3 /mnt/
 ```
 
-## Pacstrap 阶段，安装基础软件包组，内核（linux-zen）和驱动程序包（linux-firmware）
+### Pacstrap 阶段，安装基础软件包组，内核（linux-zen）和驱动程序包（linux-firmware）
 
 ```bash
 pacstrap -i /mnt base base-devel net-tools linux-firmware linux-firmware-qcom linux-firmware-qlogic linux-firmware-whence linux-firmware-nfp linux-firmware-bnx2x linux-firmware-liquidio linux-firmware-marvell linux-firmware-mellanox linux-zen linux-zen-docs linux-zen-headers
 genfstab -U -p /mnt > /mnt/etc/fstab
 ```
 
-## Chroot 阶段，进一步配置
+### Chroot 阶段，进一步配置
 
 ```bash
 arch-chroot /mnt/root/ /bin/bash
 ```
 
-## 配置计算机名称
+### 配置计算机名称
 
 ```bash
 echo 'Arch-Linux' > /etc/hostname
 ```
 
-## 配置 Locales
+### 配置 Locales
 
 ```bash
 config_locale(){
@@ -188,7 +188,7 @@ config_locale
 
 Locales 玄学：如果首次启动操作系统 Locales 设置为英语 以后总有相当多的字符无法改成中文，QT 窗口和 Java 窗口上此问题尤为严重
 
-## 配置 bootloader （grub 2，Secure boot = disabled）
+### 配置 bootloader （grub 2，Secure boot = disabled）
 
 ```bash
 install_grub(){
@@ -200,7 +200,7 @@ install_grub(){
 install_grub
 ```
 
-## 新建用户
+### 新建用户
 
 ```bash
 add_user(){
@@ -220,7 +220,7 @@ add_user(){
 add_user
 ```
 
-## 安装 Hyper-V 增强功能和键盘，鼠标，视频驱动
+### 安装 Hyper-V 增强功能和键盘，鼠标，视频驱动
 
 ```bash
 pacman -S --noconfirm hyperv xf86-video-fbdev xf86-input-vmmouse -y
@@ -229,7 +229,7 @@ systemctl enable hv_kvp_daemon.service
 systemctl enable hv_vss_daemon.service
 ```
 
-## 安装 VMware 客户机工具和键盘，鼠标，视频驱动（可选，对于 VMware 用户）
+### 安装 VMware 客户机工具和键盘，鼠标，视频驱动（可选，对于 VMware 用户）
 
 ```bash
 pacman -S --noconfirm open-vm-tools gtkmm3 -y
@@ -241,7 +241,7 @@ systemctl enable vmware-vmblock-fuse.service
 
 
 
-## 安装网络管理器，输入法，图标包，中文字体，防火墙和反病毒软件和其它系统所必须的软件包
+### 安装网络管理器，输入法，图标包，中文字体，防火墙和反病毒软件和其它系统所必须的软件包
 
 ```bash
 install_app(){
@@ -261,14 +261,14 @@ install_app(){
 install_app
 ```
 
-## 安装 Plasma 桌面（可选，stable branch）
+### 安装 Plasma 桌面（可选，stable branch）
 
 ```bash
 pacman -S plasma-meta kde-accessibility-meta kde-graphics-meta kde-multimedia-meta kde-network-meta kde-pim-meta kde-sdk-meta kde-system-meta kde-utilities-meta sddm
 systemctl enable sddm
 ```
 
-## 重启虚拟机，清理实体机所保存的 SSH 密钥，操作系统安装结束
+### 重启虚拟机，清理实体机所保存的 SSH 密钥，操作系统安装结束
 
 ```bash
 reboot
@@ -276,9 +276,9 @@ reboot
 
 为防止后续操作出现问题，可将虚拟机导出为模板
 
-# 开发环境安装阶段
+## 开发环境安装阶段
 
-## 配置 SSH 连接
+### 配置 SSH 连接
 
 开机进入虚拟机桌面，但我们通常可以通过SSH完成绝大部分工作（依赖软件包 xorg-server）
 
@@ -300,13 +300,13 @@ yes
 
 ## 安装 git 并通过 Arch Linux 用户社区仓库打包安装 Oracle JDK-11
 
-## 下载 Oracle JDK-11
+### 下载 Oracle JDK-11
 
 https://www.oracle.com/java/technologies/downloads/#java11
 
 Linux x64 Compressed Archive
 
-## 打包安装
+### 打包安装
 
 ```bash
 [arch@Arch-Linux ~]$ sudo pacman -Syu --noconfirm git
@@ -434,13 +434,13 @@ Oracle 主目录
 
 # 二.  开发一个 Java Web 应用并部署到 WebLogic
 
-# Eclipse-jee 镜像源配置
+## Eclipse-jee 镜像源配置
 
 Eclipse-jee 插件商店可配置为清华大学开源软件镜像
 
 https://download.eclipse.org 全部替换为 https://mirrors.tuna.tsinghua.edu.cn/eclipse
 
-# 新建 Dynamic Web Project
+## 新建 Dynamic Web Project
 
 Files > New > Project > Dynamic Web Project
 
@@ -763,7 +763,7 @@ MariaDB JDBC 驱动：https://mariadb.com/downloads/connectors/
 
 Servlet API：https://maven.java.net/content/repositories/releases/javax/servlet/javax.servlet-api/4.0.0/
 
-# 打包上传至 Weblogic
+## 打包上传至 Weblogic
 
 Files > Export > WAR Files
 
@@ -776,7 +776,7 @@ Weblogic 部署 > 上传
 
 # 三. 压力测试
 
-# Apache Benchmark
+## Apache Benchmark
 
 找这个软件包找了半天，查阅Arch Linux 软件包文档才发现是 Apache Httpd 网页服务器内置的压力测试工具
 
@@ -794,13 +794,13 @@ Weblogic 部署 > 上传
 # -n 访问的总次数，-c 访问的并发量
 ```
 
-# Apache Jmeter
+## Apache Jmeter
 
 没有什么技术含量，默认英语界面可切换为简体中文
 
 Options > Choose Languages > 简体中文
 
-## 主要元件
+### 主要元件
 
 - 测试计划：是使用 JMeter 进行测试的起点，它是其它 JMeter测试元件的容器
 
@@ -823,7 +823,7 @@ Options > Choose Languages > 简体中文
 - 逻辑控制器：可以自定义 JMeter 发送请求的行为逻辑，它与 Sampler 结合使用可以模拟复杂的请求序列。
 
 
-## 作用域和执行顺序
+### 作用域和执行顺序
 
 元件作用域
 
@@ -844,6 +844,6 @@ Options > Choose Languages > 简体中文
 
 配置元件 > 前置处理器 > 定时器  >取样器 > 后置处理程序 > 断言 > 监听器
 
-## Jmeter 接口测试流程
+### Jmeter 接口测试流程
 
 测试计划 > 线程组 > HTTP Cookie管理器 > 请求默认值 > Sampler > 断言 > 监听器

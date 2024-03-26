@@ -1,6 +1,10 @@
 ---
 title: "关于 VSCode 上 Go 语言开发环境的设置" 
 date: 2024-01-26T11:23:25+08:00
+toc:
+  depth_from: 1
+  depth_to: 4
+  ordered: false
 draft: false
 ---
 

@@ -3,6 +3,10 @@ title: "基于 Rocky Linux 9.3 / openEuler 22.03 LTS SP3 的 Kubernetes 集群�
 date: 2024-02-10T04:18:25+08:00
 tags: ["Kubernetes"]
 categories: ["Kubernetes"]
+toc:
+  depth_from: 1
+  depth_to: 4
+  ordered: false
 draft: false
 ---
 

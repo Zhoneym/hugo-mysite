@@ -2,6 +2,10 @@
 title: "ChromeDownloader 2.0"
 tags: ["Google Chrome"]
 date: 2023-12-10T19:18:25+08:00
+toc:
+  depth_from: 1
+  depth_to: 4
+  ordered: false
 draft: false
 ---
 

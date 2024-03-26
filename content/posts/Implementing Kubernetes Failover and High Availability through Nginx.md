@@ -3,6 +3,10 @@ title: "通过 Nginx 实现 Kubernetes 故障转移和高可用性"
 date: 2024-02-28T04:18:25+08:00
 tags: ["Kubernetes"]
 categories: ["Kubernetes"]
+toc:
+  depth_from: 1
+  depth_to: 4
+  ordered: false
 draft: false
 ---
 
