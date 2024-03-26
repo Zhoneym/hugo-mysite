@@ -9,7 +9,7 @@ draft: false
 
 In some specific scenarios, you may need to compile the kernel for WSL2 yourself. This article will discuss in detail how to compile a Linux kernel suitable for use in WSL2.
 
-# Preparation
+## Preparation
 
 1. Open the command line (Bash) for a Ubuntu 20.04 LTS (Focal Fossa) Linux distribution that you've already installed from the Microsoft Store.
 
@@ -28,7 +28,7 @@ tar -xzf linux-msft-wsl-i.j.k.l.tar.gz
 ```
 
 
-# Compilation
+## Compilation
 
 1. Enter the compilation working directory
 
@@ -57,7 +57,7 @@ make KCONFIG_CONFIG=arch/x86/configs/config-wsl -j$(nproc) CFLAGS="-march=x86-64
 ```
 
 
-# Packaging
+## Packaging
 
 1. linux-kernel
 

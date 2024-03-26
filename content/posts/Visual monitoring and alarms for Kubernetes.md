@@ -8,7 +8,7 @@ draft: false
 
 本文修订日期 ：2024 年 3 月 20 日  当前版本 ：1.29.3
 
-# 安装 Helm
+## 安装 Helm
 
 Helm 是 Kubernetes 的开源 Charts 管理器，它提供了提供、共享和使用为 Kubernetes 构建的软件的能力。Charts 是预先配置的 Kubernetes 资源文件。使用 Helm 可以：
 
