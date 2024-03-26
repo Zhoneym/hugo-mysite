@@ -8,7 +8,7 @@ draft: false
 
 本文修订日期 ：2024 年 3 月 20 日  当前版本 ：1.29.3
 
-## 安装 Helm
+# 安装 Helm
 
 Helm 是 Kubernetes 的开源 Charts 管理器，它提供了提供、共享和使用为 Kubernetes 构建的软件的能力。Charts 是预先配置的 Kubernetes 资源文件。使用 Helm 可以：
 
@@ -24,7 +24,7 @@ tar -zxvf helm-v3.14.3-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 ```
 
-### 部署 Kubernetes Dashboard
+## 部署 Kubernetes Dashboard
 
 ```bash
 helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
@@ -40,8 +40,8 @@ wget https://raw.githubusercontent.com/kubernetes/dashboard/master/charts/kubern
 编辑 dashboard-value.yaml 手工配置 KONG_ADMIN_LISTEN, KONG_PROXY_LISTEN 和 KONG_STATUS_LISTEN
 
 ```yaml
-## Required Kong sub-chart with DBless configuration to act as a gateway
-## for our all containers.
+# Required Kong sub-chart with DBless configuration to act as a gateway
+# for our all containers.
 kong:
   enabled: true
   env:
@@ -109,7 +109,7 @@ kubectl apply -f kubernetes-admin.yaml
 kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={".data.token"} | base64 -d
 ```
 
-### 部署 Grafana
+## 部署 Grafana
 
 ```bash
 helm repo add grafana https://grafana.github.io/helm-charts
@@ -134,7 +134,7 @@ kubectl get pods --namespace monitoring -l "app.kubernetes.io/name=grafana,app.k
 kubectl --namespace monitoring port-forward grafana-5c46f8dcb5-tq28r 3000
 ```
 
-### 部署 Prometheus Community
+## 部署 Prometheus Community
 
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts

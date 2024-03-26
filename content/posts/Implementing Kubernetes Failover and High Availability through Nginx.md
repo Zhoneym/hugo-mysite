@@ -8,9 +8,9 @@ draft: false
 
 本文修订日期 ：2024 年 3 月 20 日  当前版本 ：1.29.3
 
-## 通过 Nginx 实现 Kubernetes 故障转移和高可用性
+# 通过 Nginx 实现 Kubernetes 故障转移和高可用性
 
-### 网络接口规划
+## 网络接口规划
 
 | 主机名        | 网卡                | IPv4地址        | 网关        |
 | ------------- | ------------------- | --------------- | ----------- |
@@ -22,13 +22,13 @@ draft: false
 | node-3        | ens160              | 192.168.1.30/24 | 192.168.1.1 |
 | backend (VIP) | ens160 (KeepaLived) | 192.168.1.31/24 | 192.168.1.1 |
 
-### 在预先规划的管理节点上安装 Nginx 和 Keeplived
+## 在预先规划的管理节点上安装 Nginx 和 Keeplived
 
 ```bash
 dnf install -y nginx keepalived nginx-all-modules
 ```
 
-### 配置 Nginx stream 用来实现四层协议的转发、代理和负载均衡
+## 配置 Nginx stream 用来实现四层协议的转发、代理和负载均衡
 
 ```bash
 vim /etc/nginx/nginx.conf
@@ -55,9 +55,9 @@ stream {
 
 `server {...}`: 定义了一个服务器，监听端口`16443`，并将流量代理到 `backend` 这个上游服务器组
 
-### Keeplived 带 Nginx 活性监视的故障转移设置
+## Keeplived 带 Nginx 活性监视的故障转移设置
 
-#### 编写一个 Nginx 服务器活性检测脚本
+## 编写一个 Nginx 服务器活性检测脚本
 
 ```bash
 vim /etc/nginxkeepalived.sh
@@ -88,7 +88,7 @@ chmod a+x /etc/nginxkeepalived.sh
 
 这是因为 `systemd` 服务单元文件中设置默认 `KillMode=process` 这意味着当停止上 `keepalived` 的时候只停掉主进程，而主进程产生的子进程是不会被停掉。可以尝试修改 `keepalived.service` 文件，将 KillMode 设置 control-group 然后使用 `systemctl daemon-reload` 命令来重读配置。
 
-#### Keeplived 带 Nginx 活性监视的故障转移设置（主节点）
+## Keeplived 带 Nginx 活性监视的故障转移设置（主节点）
 
 ```bash
 vim /etc/keepalived/keepalived.conf
@@ -117,7 +117,7 @@ vrrp_instance VI_1 {
 }
 ```
 
-#### 从节点 Keeplived 配置
+## 从节点 Keeplived 配置
 
 `state`: Keeplived 角色 从节点可设置为 BACKUP
 
@@ -129,7 +129,7 @@ vrrp_instance VI_1 {
 
 `advert_int`: 指定VRRP 心跳包通告间隔时间，默认1秒
 
-#### Keepalived 负载均衡转移设置（可选追加配置）
+## Keepalived 负载均衡转移设置（可选追加配置）
 
 ```bash
 vim /etc/keepalived/keepalived.conf
@@ -157,7 +157,7 @@ virtual_server 192.168.1.31 16443 {
 }
 ```
 
-#### 启用高可用性
+## 启用高可用性
 
 ```bash
 systemctl daemon-reload
@@ -165,9 +165,9 @@ systemctl enable keepalived.service
 systemctl enable --now nginx.service
 ```
 
-## Kubeadm 初始化集群设置
+# Kubeadm 初始化集群设置
 
-### 检查域名解析
+## 检查域名解析
 
 ```bash
 vim /etc/hosts
@@ -180,7 +180,7 @@ vim /etc/hosts
 192.168.1.31    backend
 ```
 
-### 初始化 master-1 控制平面
+## 初始化 master-1 控制平面
 
 ```bash
 unset http_proxy
@@ -195,7 +195,7 @@ kubeadm init --image-repository=registry.aliyuncs.com/google_containers \
 
 `--control-plane-endpoint` 应配置为 keepaLived 生成的 Backend VIP
 
-### 扩容其他节点 master-2 和 master-3 到控制平面
+## 扩容其他节点 master-2 和 master-3 到控制平面
 
 同步控制平面证书到 master-2 和 master-3
 
@@ -229,7 +229,7 @@ scp /etc/kubernetes/pki/etcd/ca.key master-3:/etc/kubernetes/pki/etcd/
 kubeadm token create --print-join-command
 ```
 
-### ETCD 高可用
+## ETCD 高可用
 
 所有控制平面节点配置 etcd 参数文件
 
@@ -254,7 +254,7 @@ systemctl restart kubelet.service
 ```
 
 
-### 安装网络插件 Flannel（可选）
+## 安装网络插件 Flannel（可选）
 
 ```bash
 wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -263,7 +263,7 @@ kubectl apply -f kube-flannel.yml
 
 注意在创建资源前应保证 kube-flannel.yml 内 net-conf.json 字段的 IPv4 地址配置应和 --pod-network-cidr 所指定的地址一致
 
-### 安装网络插件 Project Calico（可选）
+## 安装网络插件 Project Calico（可选）
 
 ```bash
 wget https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
@@ -278,12 +278,12 @@ kubectl apply -f custom-resources.yaml
 
 注意在创建资源前应保证 custom-resources.yaml 内 IPv4 地址配置应和 --pod-network-cidr 所指定的地址一致
 
-### 验证集群部署状态
+## 验证集群部署状态
 
 ```bash
 kubectl get pods -A && kubectl get nodes
 ```
 
-## 对于 Kubekey 工具搭建 Kubernetes 集群 ETCD 报错问题的解决方案
+# 对于 Kubekey 工具搭建 Kubernetes 集群 ETCD 报错问题的解决方案
 
 KubeSphere 的文档并未提及的一处过时配置，修改部署配置文件里的 etcd type 字段为 kubeadm 可以解决这个问题（值为 kubekey 的设置已经失效）

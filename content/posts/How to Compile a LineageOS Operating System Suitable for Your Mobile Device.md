@@ -5,7 +5,7 @@ tags: ["Android"]
 draft: false
 ---
 
-## 如果当前环境是 Microsoft WSL2
+# 如果当前环境是 Microsoft WSL2
 
 ```bash
 sudo su root
@@ -24,7 +24,7 @@ generateResolvConf = false
 EOF
 ```
 
-## 安装必要工具(Ubuntu 20.04)
+# 安装必要工具(Ubuntu 20.04)
 
 ```bash
 sudo apt-get update -y && sudo apt-get upgrade -y
@@ -36,14 +36,14 @@ squashfs-tools xsltproc zip zlib1g-dev cmake clang lldb neofetch python-is-pytho
 libwxgtk3.0-gtk3-dev python3-protobuf brotli
 ```
 
-## 安装 OpenJDK
+# 安装 OpenJDK
 
 ```bash
 wget https://download.bell-sw.com/java/11.0.20+8/bellsoft-jdk11.0.20+8-linux-amd64-full.deb
 sudo dpkg -i bellsoft-jdk11.0.20+8-linux-amd64-full.deb
 ```
 
-## 安装 repo
+# 安装 repo
 
 ```bash 
 mkdir -p ~/bin
@@ -66,7 +66,7 @@ source ~/.profile
 ```
 
 
-## 安装 platform-tools
+# 安装 platform-tools
 
 ```bash
 curl https://dl.google.com/android/repository/platform-tools-latest-linux.zip
@@ -85,7 +85,7 @@ fi
 ```bash
 source ~/.profile
 ```
-## 启用 ccache
+# 启用 ccache
 
 在 `~/.bashrc` 文件末尾加入:
 
@@ -103,14 +103,14 @@ source ~/.bashrc
 ccache -M 80G
 ```
 
-## 配置 git
+# 配置 git
 
 ```bash
 git config --global user.email "Zhoneym@Outlook.com"
 git config --global user.name "Zhoneym"
 ```
 
-## 同步源码镜像
+# 同步源码镜像
 
 ```bash
 mkdir -p ~/android/lineage  
@@ -151,7 +151,7 @@ repo init -u https://mirrors.tuna.tsinghua.edu.cn/git/lineageOS/LineageOS/androi
 repo sync
 ```
 
-## 添加设备树和设备内核代码
+# 添加设备树和设备内核代码
 
 修改 `.repo/manifest.xml` 在`<include name="default.xml" />` 下一行添加:
 
@@ -174,7 +174,7 @@ repo sync
 repo sync
 ```
 
-## 提取设备 blob(以 Essential PH-1 为例)
+# 提取设备 blob(以 Essential PH-1 为例)
 
 ```bash
 mkdir ~/android/system_dump/
@@ -195,7 +195,7 @@ sudo umount -R ~/android/system_dump/system/
 rm -rf ~/android/system_dump/
 ```
 
-## 编译(不带签名,以 Essential PH-1 为例)
+# 编译(不带签名,以 Essential PH-1 为例)
 
 ```bash
 source build/envsetup.sh

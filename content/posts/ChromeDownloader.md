@@ -22,7 +22,7 @@ https://github.com/Zhoneym/ChromeDownloader
 同时提供可以随时获取多个平台 Chromium 浏览器的PowerShell脚本
 
 
-## 快速食用指南
+# 快速食用指南
 
 安装 bellsoft LibericaJDK：
 
@@ -34,14 +34,14 @@ https://download.bell-sw.com/java/21.0.1+12/bellsoft-jdk21.0.1+12-macos-aarch64-
 
 https://download.bell-sw.com/java/21.0.1+12/bellsoft-jdk21.0.1+12-macos-amd64-full.dmg
 
-## 编译
+# 编译
 
 如果你需要 Windows 版本的 Google Chrome ：javac ChromeDownloader.java
 
 如果你需要 MacOS 版本的 Google Chrome ：javac ChromeDownloaderMacOS.java
 
 
-## 运行
+# 运行
 
 
 如果你需要 Windows 版本的 Google Chrome ：java ChromeDownloader
@@ -54,6 +54,6 @@ Select a version with an update frequency that suits you.
 
 
 
-## 便携化
+# 便携化
 
 Chrome++ : https://github.com/Bush2021/chrome_plus

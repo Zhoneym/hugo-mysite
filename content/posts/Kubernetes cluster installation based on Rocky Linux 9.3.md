@@ -8,11 +8,11 @@ draft: false
 
 本文修订日期 ：2024 年 3 月 20 日  当前版本 ：1.29.3
 
-## Linux 操作系统环境的安装与配置
+# Linux 操作系统环境的安装与配置
 
 目标是做两台 Rocky Linux 9.3 / openEuler 22.03 LTS SP3 虚拟机，一台做 Kubernetes 的控制平面，另一台做计算节点，基本环境最小化安装
 
-### 创建虚拟机
+## 创建虚拟机
 
 | 硬件配置                                      | 规格                                                         |
 | --------------------------------------------- | ------------------------------------------------------------ |
@@ -27,32 +27,32 @@ draft: false
 | 芯片组                                        | 默认                                                         |
 | 启动类型                                      | UEFI                                                         |
 
-### DVD 启动光盘镜像文件
+## DVD 启动光盘镜像文件
 
 https://rockylinux.org/zh_CN/download
 
 https://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP3/ISO/x86_64/
 
-###  分区规划
+##  分区规划
 
 |    磁盘分区    |  挂载点   |                   用途及大小                   | 大小 | 格式  |
 | :------------: | :-------: | :--------------------------------------------: | :--: | :---: |
 | /dev/nvme0n1p1 | /boot/EFI | ESP启动分区，bootloader 固件，内核镜像所在目录 /boot |  1G  | FAT32 |
 | /dev/nvme0n1p3 |     /     |                       根                       | 33G  | EXT4  |
 
-### 网络接口规划
+## 网络接口规划
 
 |  主机名  |  网卡  |    IPv4地址     |    网关     |
 | :------: | :----: | :-------------: | :---------: |
 | master-1 | ens160 | 192.168.1.16/24 | 192.168.1.1 |
 |  node-1  | ens160 | 192.168.1.22/24 | 192.168.1.1 |
 
-### 安装一些基本的软件包
+## 安装一些基本的软件包
 
 ```bash
 dnf install vim git zsh sqlite wget lsof nano util-linux-user -y
 ```
-### 写给 openEuler 用户的提示
+## 写给 openEuler 用户的提示
 
 openEuler 通过网络在线安装选项安装源读不出来，看来是openEuler 开发小组没处理好在线安装的逻辑，如果确实需要在线安装选项你应该手动输入在线镜像源比如 
 
@@ -72,7 +72,7 @@ https://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP3/update/x8
 sed -i 's/if \[ "$whoiam" == "root" \]/if \[ "$(whoami)" = "root" \]/g' /etc/profile.d/system-info.sh
 ```
 
-### 部署 Docker CE
+## 部署 Docker CE
 
 ```bash
 dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -81,7 +81,7 @@ systemctl enable --now docker.service
 systemctl enable --now docker.socket
 ```
 
-### 部署 CRI-Dockerd
+## 部署 CRI-Dockerd
 
 ```bash
 export http_proxy=http://192.168.1.11:7890
@@ -95,7 +95,7 @@ sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/syst
 systemctl enable --now cri-docker.service
 systemctl enable --now cri-docker.socket
 ```
-### 安装操作系统管理工具 Cockpit 软件包组
+## 安装操作系统管理工具 Cockpit 软件包组
 
 ```bash
 dnf install cockpit cockpit-ws cockpit-storaged cockpit-system
@@ -115,21 +115,21 @@ Cockpit 管理工具疑难解问题
 
 1. auditd 需要重启 `chmod 755 /var/log/audit/` 后 `service auditd restart`
 
-### 设置 SELinux 状态为 Permissive
+## 设置 SELinux 状态为 Permissive
 
 ```bash
 setenforce 0
 sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 ```
 
-### 清空 IPTables 并禁用防火墙
+## 清空 IPTables 并禁用防火墙
 
 ```bash
 iptables -F && iptables-save
 systemctl stop firewalld.service && systemctl disable firewalld.service
 ```
 
-### 启用 Kubernetes 软件仓库 并安装 Kubelet、Kubeadm 和 Kubectl
+## 启用 Kubernetes 软件仓库 并安装 Kubelet、Kubeadm 和 Kubectl
 
 ```bash
 cat <<EOF | sudo tee /etc/yum.repos.d/Kubernetes.repo
@@ -147,7 +147,7 @@ dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 systemctl enable --now kubelet.service
 ```
 
-### 设置 Docker Cgroup Driver 及镜像加速器（推荐）
+## 设置 Docker Cgroup Driver 及镜像加速器（推荐）
 
 ```bash
 vim /etc/docker/daemon.json
@@ -176,7 +176,7 @@ systemctl restart cri-docker.socket
 docker login
 ```
 
-### 设置 Docker 镜像服务器访问代理（可选但不推荐，不利于交付）
+## 设置 Docker 镜像服务器访问代理（可选但不推荐，不利于交付）
 
 ```bash
 vim /etc/docker/daemon.json
@@ -207,7 +207,7 @@ systemctl restart docker.socket
 systemctl restart cri-docker.service
 systemctl restart cri-docker.socket
 ```
-### 对于 Contarinerd 用户（可选）
+## 对于 Contarinerd 用户（可选）
 
 Step 1: Installing containerd
 
@@ -256,7 +256,7 @@ systemctl daemon-reload
 systemctl enable --now containerd
 ```
 
-### 调整内核参数
+## 调整内核参数
 
 ```bash
 cat>> /etc/sysctl.d/99-kubernetes.conf <<EOF
@@ -269,7 +269,7 @@ modprobe br_netfilter
 sysctl -p /etc/sysctl.d/99-kubernetes.conf
 ```
 
-### 开启内核 IPVS 以彻底弃用 IPTables
+## 开启内核 IPVS 以彻底弃用 IPTables
 
 ```bash
 dnf install -y ipvsadm
@@ -287,7 +287,7 @@ EOF
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules
 lsmod | grep ip_vs
 ```
-### 内核配置持久化
+## 内核配置持久化
 
 ```bash
 vim /etc/environment
@@ -296,7 +296,7 @@ sysctl -p /etc/sysctl.d/99-kubernetes.conf
 bash /etc/sysconfig/modules/ipvs.modules
 ```
 
-### 日志持久化
+## 日志持久化
 
 ```bash
 mkdir /var/log/journal
@@ -316,7 +316,7 @@ EOF
 systemctl restart systemd-journald
 ```
 
-### 设置 Kubelet Cgroup Driver
+## 设置 Kubelet Cgroup Driver
 
 ```bash
 vim /etc/systemd/system/multi-user.target.wants/kubelet.service
@@ -327,7 +327,7 @@ systemctl daemon-reload
 systemctl restart kubelet.service
 ```
 
-### 配置域名解析
+## 配置域名解析
 
 ```bash
 vim /etc/hosts
@@ -335,15 +335,15 @@ vim /etc/hosts
 192.168.1.22	node-1
 ```
 
-### 配置时间同步
+## 配置时间同步
 
 ```bash
 chronyc -a makestep && date
 ```
 
-## 创建 Kubernetes 集群
+# 创建 Kubernetes 集群
 
-### 初始化集群控制节点
+## 初始化集群控制节点
 
 ```bash
 unset http_proxy
@@ -381,7 +381,7 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 
 其他节点的加入按照初始化集群控制节点后打印出的信息执行 kubeadm join，注意追加 --cri-socket 参数
 
-### 控制平面节点隔离（Kubernetes AllinOne 污染节点/容忍污染）
+## 控制平面节点隔离（Kubernetes AllinOne 污染节点/容忍污染）
 
 默认情况下，出于安全原因，Kubernetes 集群不会在控制平面节点上调度 Pod。 如果你希望能够在单机 Kubernetes 集群等控制平面节点上调度 Pod，应该运行：
 
@@ -401,7 +401,7 @@ kubectl taint nodes master node-role.kubernetes.io/control-plane=:NoSchedule
 kubectl describe nodes master |grep Taints
 ```
 
-### 安装网络插件 Flannel（可选）
+## 安装网络插件 Flannel（可选）
 
 ```bash
 wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -410,7 +410,7 @@ kubectl apply -f kube-flannel.yml
 
 注意在创建资源前应保证 kube-flannel.yml 内 net-conf.json 字段的 IPv4 地址配置应和 --pod-network-cidr 所指定的地址一致
 
-### 安装网络插件 Project Calico（可选）
+## 安装网络插件 Project Calico（可选）
 
 ```bash
 wget https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
@@ -425,19 +425,19 @@ kubectl apply -f custom-resources.yaml
 
 注意在创建资源前应保证 custom-resources.yaml 内 IPv4 地址配置应和 --pod-network-cidr 所指定的地址一致
 
-### 验证集群部署状态
+## 验证集群部署状态
 
 ```bash
 kubectl get pods -A && kubectl get nodes
 ```
 
-### 配置 crictl
+## 配置 crictl
 
 ```bash
 crictl config runtime-endpoint /run/containerd/containerd.sock
 ```
 
-### IPv4/IPv6 双协议栈接入的 Kubernetes 集群
+## IPv4/IPv6 双协议栈接入的 Kubernetes 集群
 
 特性状态： Kubernetes v1.23 [stable]
 IPv4/IPv6 双协议栈网络能够将 IPv4 和 IPv6 地址分配给 Pod 和 Service。
@@ -457,7 +457,7 @@ kubeadm init --image-repository=registry.aliyuncs.com/google_containers --apiser
 
 标志 `--apiserver-advertise-address` 不支持双协议栈
 
-#### Project Calico 的 IPv4/IPv6 双协议栈接入支持
+## Project Calico 的 IPv4/IPv6 双协议栈接入支持
 
 编辑 custom-resources.yaml
 

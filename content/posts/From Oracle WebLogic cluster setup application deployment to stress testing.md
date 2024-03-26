@@ -15,9 +15,9 @@ VMWare Workstations 17 有针对  HypervisorType-1 侧通道缓解措施但效�
 bcdedit /set hypervisorlaunchtype off
 ```
 
-## 安装 Hyper-V 虚拟机环境（可选，对于 WSL 2 和 Android 子系统 用户）
+# 安装 Hyper-V 虚拟机环境（可选，对于 WSL 2 和 Android 子系统 用户）
 
-### 通过“设置”启用 Hyper-V 角色
+## 通过“设置”启用 Hyper-V 角色
 
 右键单击 Windows 按钮 设置 —— 应用 —— 可选功能 ——更多 Windows 功能。
 
@@ -29,17 +29,17 @@ bcdedit /set hypervisorlaunchtype off
 
 选择“Windows 虚拟化平台”，然后单击“确定”。（针对 WSL 2 和 Android 子系统 用户）
 
-### 或使用 DISM 启用 Hyper-V
+## 或使用 DISM 启用 Hyper-V
 
 ```powershell
 Dism /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
 ```
 
-## Linux 虚拟机环境的安装
+# Linux 虚拟机环境的安装
 
 因为要以文档的形式呈现本操作题目，Ubuntu 或者 Deban 图形化操作界面没什么可说的，所以本次采用 Arch Linux 以控制台输入 bash/zsh 命令的方式去安装一个虚拟机。
 
-### 创建虚拟机
+## 创建虚拟机
 
 | 硬件配置                                      | 规格                                                         |
 | --------------------------------------------- | ------------------------------------------------------------ |
@@ -54,13 +54,13 @@ Dism /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
 | 芯片组                                        | 默认                                                         |
 | 启动类型                                      | UEFI                                                         |
 
-### DVD 启动光盘镜像文件
+## DVD 启动光盘镜像文件
 
 Arch Linux 2023.12
 
 https://mirrors.tuna.tsinghua.edu.cn/archlinux/iso/latest/archlinux-2023.12.01-x86_64.iso  (清华大学开源软件镜像站)
 
-### 配置 SSH 连接（可选）
+## 配置 SSH 连接（可选）
 
 开机进入 CLI 安装模式会自动以 root 模式登录，Arch Linux LiveDVD 的 root 密码为随机字符串，配置 SSH 时应配置为：
 
@@ -85,14 +85,14 @@ PS C:\Users\Administrator>ssh root@192.168.1.5
 yes
 ```
 
-### 网络连通性测试
+## 网络连通性测试
 
 ```bash
 ipaddr
 ping -c4 www.163.com
 ```
 
-### 确定安装源刷新软件仓库密钥
+## 确定安装源刷新软件仓库密钥
 
 ```bash
 echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
@@ -102,7 +102,7 @@ pacman -S --noconfirm wget -y
 pacman -S --noconfirm archlinux-keyring -y
 ```
 
-### 增强软件包管理器下载软件包的稳定性
+## 增强软件包管理器下载软件包的稳定性
 
 ```bash
 vim /etc/pacman.conf
@@ -114,7 +114,7 @@ ParallelDownloads = 8
 :wq!
 ```
 
-### 分区规划
+## 分区规划
 
 创建分区并保持退出
 
@@ -138,26 +138,26 @@ mount /dev/nvme0n1p1 /mnt/boot/
 mount /dev/nvme0n1p3 /mnt/
 ```
 
-### Pacstrap 阶段，安装基础软件包组，内核（linux-zen）和驱动程序包（linux-firmware）
+## Pacstrap 阶段，安装基础软件包组，内核（linux-zen）和驱动程序包（linux-firmware）
 
 ```bash
 pacstrap -i /mnt base base-devel net-tools linux-firmware linux-firmware-qcom linux-firmware-qlogic linux-firmware-whence linux-firmware-nfp linux-firmware-bnx2x linux-firmware-liquidio linux-firmware-marvell linux-firmware-mellanox linux-zen linux-zen-docs linux-zen-headers
 genfstab -U -p /mnt > /mnt/etc/fstab
 ```
 
-### Chroot 阶段，进一步配置
+## Chroot 阶段，进一步配置
 
 ```bash
 arch-chroot /mnt/root/ /bin/bash
 ```
 
-### 配置计算机名称
+## 配置计算机名称
 
 ```bash
 echo 'Arch-Linux' > /etc/hostname
 ```
 
-### 配置 Locales
+## 配置 Locales
 
 ```bash
 config_locale(){
@@ -188,7 +188,7 @@ config_locale
 
 Locales 玄学：如果首次启动操作系统 Locales 设置为英语 以后总有相当多的字符无法改成中文，QT 窗口和 Java 窗口上此问题尤为严重
 
-### 配置 bootloader （grub 2，Secure boot = disabled）
+## 配置 bootloader （grub 2，Secure boot = disabled）
 
 ```bash
 install_grub(){
@@ -200,7 +200,7 @@ install_grub(){
 install_grub
 ```
 
-### 新建用户
+## 新建用户
 
 ```bash
 add_user(){
@@ -220,7 +220,7 @@ add_user(){
 add_user
 ```
 
-### 安装 Hyper-V 增强功能和键盘，鼠标，视频驱动
+## 安装 Hyper-V 增强功能和键盘，鼠标，视频驱动
 
 ```bash
 pacman -S --noconfirm hyperv xf86-video-fbdev xf86-input-vmmouse -y
@@ -229,7 +229,7 @@ systemctl enable hv_kvp_daemon.service
 systemctl enable hv_vss_daemon.service
 ```
 
-### 安装 VMware 客户机工具和键盘，鼠标，视频驱动（可选，对于 VMware 用户）
+## 安装 VMware 客户机工具和键盘，鼠标，视频驱动（可选，对于 VMware 用户）
 
 ```bash
 pacman -S --noconfirm open-vm-tools gtkmm3 -y
@@ -241,7 +241,7 @@ systemctl enable vmware-vmblock-fuse.service
 
 
 
-### 安装网络管理器，输入法，图标包，中文字体，防火墙和反病毒软件和其它系统所必须的软件包
+## 安装网络管理器，输入法，图标包，中文字体，防火墙和反病毒软件和其它系统所必须的软件包
 
 ```bash
 install_app(){
@@ -261,14 +261,14 @@ install_app(){
 install_app
 ```
 
-### 安装 Plasma 桌面（可选，stable branch）
+## 安装 Plasma 桌面（可选，stable branch）
 
 ```bash
 pacman -S plasma-meta kde-accessibility-meta kde-graphics-meta kde-multimedia-meta kde-network-meta kde-pim-meta kde-sdk-meta kde-system-meta kde-utilities-meta sddm
 systemctl enable sddm
 ```
 
-### 重启虚拟机，清理实体机所保存的 SSH 密钥，操作系统安装结束
+## 重启虚拟机，清理实体机所保存的 SSH 密钥，操作系统安装结束
 
 ```bash
 reboot
@@ -276,9 +276,9 @@ reboot
 
 为防止后续操作出现问题，可将虚拟机导出为模板
 
-## 开发环境安装阶段
+# 开发环境安装阶段
 
-### 配置 SSH 连接
+## 配置 SSH 连接
 
 开机进入虚拟机桌面，但我们通常可以通过SSH完成绝大部分工作（依赖软件包 xorg-server）
 
@@ -298,15 +298,15 @@ PS C:\Users\Administrator>ssh arch@192.168.1.5
 yes
 ```
 
-### 安装 git 并通过 Arch Linux 用户社区仓库打包安装 Oracle JDK-11
+## 安装 git 并通过 Arch Linux 用户社区仓库打包安装 Oracle JDK-11
 
-#### 下载 Oracle JDK-11
+## 下载 Oracle JDK-11
 
 https://www.oracle.com/java/technologies/downloads/#java11
 
 Linux x64 Compressed Archive
 
-#### 打包安装
+## 打包安装
 
 ```bash
 [arch@Arch-Linux ~]$ sudo pacman -Syu --noconfirm git
@@ -324,7 +324,7 @@ Java(TM) SE Runtime Environment 18.9 (build 11.0.21+9-LTS-193)
 Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.21+9-LTS-193, mixed mode)
 ```
 
-### 打包安装 Eclipse-jee
+## 打包安装 Eclipse-jee
 
 ```bash
 [arch@Arch-Linux ~]$ git clone https://aur.archlinux.org/eclipse-jee.git
@@ -333,7 +333,7 @@ Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.21+9-LTS-193, mixed mode)
 # 可以注释掉 eclipse-jee 打包时对 openjdk 的强制依赖
 ```
 
-### 安装 Apache Benchmark 和 Apache Jmeter
+## 安装 Apache Benchmark 和 Apache Jmeter
 
 ```bash
 [arch@Arch-Linux ~]$ sudo pacman -Syu --noconfirm apache
@@ -342,7 +342,7 @@ Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.21+9-LTS-193, mixed mode)
 [arch@Arch-Linux jmeter]$ makepkg -si
 ```
 
-### 打包安装 Microsoft Edge
+## 打包安装 Microsoft Edge
 
 ```bash
 [arch@Arch-Linux ~]$ git clone https://aur.archlinux.org/microsoft-edge-stable-bin
@@ -350,7 +350,7 @@ Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.21+9-LTS-193, mixed mode)
 [arch@Arch-Linux microsoft-edge-stable-bin]$ makepkg -si
 ```
 
-### 安装 Mariadb 数据库
+## 安装 Mariadb 数据库
 
 ```bash
 [arch@Arch-Linux ~]$ sudo pacman -Syu --noconfirm mariadb mariadb-libs
@@ -360,7 +360,7 @@ Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.21+9-LTS-193, mixed mode)
 [arch@Arch-Linux ~]$ sudo mariadb-admin -u root password 'root'
 ```
 
-### 安装 Weblogic
+## 安装 Weblogic
 
 到社群里问了一下，Arch Linux 用户社区仓库里没有 Weblogic 的 PKGBUILD，需要手动下载
 
@@ -404,7 +404,7 @@ Oracle 主目录
 [arch@Arch-Linux ~]$ sudo systemctl enable --now cockpit.socket
 ```
 
-### WebLogic 集群的搭建
+## WebLogic 集群的搭建
 
 误区：Server 的概念不同于计算机网络对物理层设备的定义，如果我们假设一个端口只提供一个应用程序服务，那么一个套接字（Socket）就可以被视为一个单独的 服务器，套接字是网络通信的基础，它是在特定的 IP 地址和端口上监听传入请求的一种方式。每个套接字都可以看作是一个独立的服务器，它在特定的端口上提供特定的服务。这种理解方式强调了服务的分布式和并发性。
 
@@ -434,13 +434,13 @@ Oracle 主目录
 
 # 二.  开发一个 Java Web 应用并部署到 WebLogic
 
-## Eclipse-jee 镜像源配置
+# Eclipse-jee 镜像源配置
 
 Eclipse-jee 插件商店可配置为清华大学开源软件镜像
 
 https://download.eclipse.org 全部替换为 https://mirrors.tuna.tsinghua.edu.cn/eclipse
 
-## 新建 Dynamic Web Project
+# 新建 Dynamic Web Project
 
 Files > New > Project > Dynamic Web Project
 
@@ -454,7 +454,7 @@ Dynamic Web module version 调整为 4.0
 
 使用MariaDB数据库进行用户注册和登录。以下是源码：
 
-### 数据库表创建 (在MariaDB中执行)
+## 数据库表创建 (在MariaDB中执行)
 
 ```sql
 CREATE DATABASE UserDB;
@@ -465,7 +465,7 @@ CREATE TABLE Users (
 );
 ```
 
-### Java 数据库连接类 (DBConnection.java)
+## Java 数据库连接类 (DBConnection.java)
 
 ```java
 import java.sql.*;
@@ -487,7 +487,7 @@ public class DBConnection {
 }
 ```
 
-### 用户模型 (User.java)
+## 用户模型 (User.java)
 
 ```java
 public class User {
@@ -510,7 +510,7 @@ public class User {
 }
 ```
 
-### 用户DAO (UserDAO.java)
+## 用户DAO (UserDAO.java)
 
 ```java
 import java.sql.*;
@@ -545,7 +545,7 @@ public class UserDAO {
 }
 ```
 
-### Registration Page (register.jsp)
+## Registration Page (register.jsp)
 
 ```jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -564,7 +564,7 @@ public class UserDAO {
 </html>
 ```
 
-### Login Page (login.jsp)
+## Login Page (login.jsp)
 
 ```jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -583,7 +583,7 @@ public class UserDAO {
 </html>
 ```
 
-### Login Success Page (login_success.jsp)
+## Login Success Page (login_success.jsp)
 
 ```jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -598,7 +598,7 @@ public class UserDAO {
 </html>
 ```
 
-### Login Failure Page (login_fail.jsp)
+## Login Failure Page (login_fail.jsp)
 
 ```jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -613,7 +613,7 @@ public class UserDAO {
 </html>
 ```
 
-### Registration Success Page (register_success.jsp)
+## Registration Success Page (register_success.jsp)
 
 ```jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -628,7 +628,7 @@ public class UserDAO {
 </html>
 ```
 
-### Registration Failure Page (register_fail.jsp)
+## Registration Failure Page (register_fail.jsp)
 
 ```jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -643,7 +643,7 @@ public class UserDAO {
 </html>
 ```
 
-### 注册 Servlet (RegisterServlet.java)
+## 注册 Servlet (RegisterServlet.java)
 
 ```java
 import java.io.*;
@@ -681,7 +681,7 @@ public class RegisterServlet extends HttpServlet {
 }
 ```
 
-### 登录 Servlet (LoginServlet.java)
+## 登录 Servlet (LoginServlet.java)
 
 ```java
 import java.io.*;
@@ -719,7 +719,7 @@ public class LoginServlet extends HttpServlet {
 }
 ```
 
-### 项目的配置文件
+## 项目的配置文件
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -763,20 +763,20 @@ MariaDB JDBC 驱动：https://mariadb.com/downloads/connectors/
 
 Servlet API：https://maven.java.net/content/repositories/releases/javax/servlet/javax.servlet-api/4.0.0/
 
-## 打包上传至 Weblogic
+# 打包上传至 Weblogic
 
 Files > Export > WAR Files
 
 Weblogic 部署 > 上传
 
-### 兼容性问题
+## 兼容性问题
 
 -  JavaWeb 项目应和中间件使用的 jdk 版本一致，否则部署必然失败
 - Apache Tomcat 10 中，所有的servlet类都应该使用 jakarta.servlet，而不是 javax.servlet 而 Weblogic 最新版本仍不识别 jakarta.servlet
 
 # 三. 压力测试
 
-## Apache Benchmark
+# Apache Benchmark
 
 找这个软件包找了半天，查阅Arch Linux 软件包文档才发现是 Apache Httpd 网页服务器内置的压力测试工具
 
@@ -794,13 +794,13 @@ Weblogic 部署 > 上传
 # -n 访问的总次数，-c 访问的并发量
 ```
 
-## Apache Jmeter
+# Apache Jmeter
 
 没有什么技术含量，默认英语界面可切换为简体中文
 
 Options > Choose Languages > 简体中文
 
-### 主要元件
+## 主要元件
 
 - 测试计划：是使用 JMeter 进行测试的起点，它是其它 JMeter测试元件的容器
 
@@ -823,7 +823,7 @@ Options > Choose Languages > 简体中文
 - 逻辑控制器：可以自定义 JMeter 发送请求的行为逻辑，它与 Sampler 结合使用可以模拟复杂的请求序列。
 
 
-### 作用域和执行顺序
+## 作用域和执行顺序
 
 元件作用域
 
@@ -844,6 +844,6 @@ Options > Choose Languages > 简体中文
 
 配置元件 > 前置处理器 > 定时器  >取样器 > 后置处理程序 > 断言 > 监听器
 
-### Jmeter 接口测试流程
+## Jmeter 接口测试流程
 
 测试计划 > 线程组 > HTTP Cookie管理器 > 请求默认值 > Sampler > 断言 > 监听器
