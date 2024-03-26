@@ -3,6 +3,9 @@ title: "Kubernetes 的可视化监控和告警"
 date: 2024-03-20T04:17:25+08:00
 tags: ["Kubernetes"]
 categories: ["Kubernetes"]
+toc:
+  depth_from: 1
+  depth_to: 4
 draft: false
 ---
 
