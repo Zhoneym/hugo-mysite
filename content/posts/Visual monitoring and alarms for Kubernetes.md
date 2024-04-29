@@ -50,9 +50,9 @@ kong:
   enabled: true
   env:
     dns_order: LAST,A,SRV,CNAME
-    KONG_ADMIN_LISTEN: 0.0.0.0:8444 http2 ssl
-    KONG_PROXY_LISTEN: 0.0.0.0:8443 http2 ssl
-    KONG_STATUS_LISTEN: 0.0.0.0:8100
+    ADMIN_LISTEN: 0.0.0.0:8444 http2 ssl
+    PROXY_LISTEN: 0.0.0.0:8443 http2 ssl
+    STATUS_LISTEN: 0.0.0.0:8100
   ingressController:
     enabled: false
   dblessConfig:
