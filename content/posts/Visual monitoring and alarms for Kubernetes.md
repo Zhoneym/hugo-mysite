@@ -110,7 +110,7 @@ kubectl apply -f kubernetes-admin.yaml
 获取 Dashboard Token
 
 ```bash
-kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={".data.token"} | base64 -d
+kubectl get secret admin -n kubernetes-dashboard -o jsonpath={".data.token"} | base64 -d
 ```
 
 ## 部署 Grafana
