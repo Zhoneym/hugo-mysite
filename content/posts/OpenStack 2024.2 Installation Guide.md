@@ -13,11 +13,9 @@ draft: false
 本文修订日期 ：2025 年 4 月 24 日  当前版本 ：2024.2
 
 
-# OpenStack 2024.2 安装指南（基于 Debian Bookworm + Kolla Ansible）
 
 本指南详细解释了部署 OpenStack 2024.2 所涉及的每一步命令，帮助您理解其作用及背后的逻辑。适用于希望使用 [Kolla Ansible](https://docs.openstack.org/kolla-ansible/latest/) 自动部署的用户。
 
----
 
 ## 环境准备
 
