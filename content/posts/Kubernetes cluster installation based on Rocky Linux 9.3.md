@@ -76,7 +76,7 @@ https://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP3/update/x8
 sed -i 's/if \[ "$whoiam" == "root" \]/if \[ "$(whoami)" = "root" \]/g' /etc/profile.d/system-info.sh
 ```
 
-## 部署 Docker CE
+## 部署 Docker CE （如果 用 Containerd 可以跳过这一步）
 
 ```bash
 dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -85,7 +85,7 @@ systemctl enable --now docker.service
 systemctl enable --now docker.socket
 ```
 
-## 部署 CRI-Dockerd
+## 部署 CRI-Dockerd （如果 用 Containerd 可以跳过这一步）
 
 ```bash
 export http_proxy=http://192.168.1.11:7890
@@ -99,7 +99,7 @@ sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/syst
 systemctl enable --now cri-docker.service
 systemctl enable --now cri-docker.socket
 ```
-## 安装操作系统管理工具 Cockpit 软件包组
+## 安装操作系统管理工具 Cockpit 软件包组 (可选，推荐 Nodejs 版本 大于 18.x)
 
 ```bash
 dnf install cockpit cockpit-ws cockpit-storaged cockpit-system
@@ -151,16 +151,13 @@ dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 systemctl enable --now kubelet.service
 ```
 
-## 设置 Docker Cgroup Driver 及镜像加速器（推荐）
+## 设置 Docker Cgroup Driver（推荐如果 用 Containerd 可以跳过这一步）
 
 ```bash
 vim /etc/docker/daemon.json
 {
    "exec-opts": [
         "native.cgroupdriver=systemd"
-  ],
-   "registry-mirrors": [
-        "https://docker.mirrors.sjtug.sjtu.edu.cn/"
   ]
 }    
 
@@ -238,19 +235,19 @@ tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.4.1.tgz
 
 Step 4: Generate containerd configuration file
 
+
+
 ```bash
 mkdir -p /etc/containerd/
 containerd config default > /etc/containerd/config.toml
+
+# 找到 sandbox_image 和 SystemdCgroup 配置项 做如下修改
 vim /etc/containerd/config.toml
    [plugins."io.containerd.grpc.v1.cri"]
       sandbox_image = "registry.aliyuncs.com/google_containers/pause:3.9"
                [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
                   SystemdCgroup = true
-      [plugins."io.containerd.grpc.v1.cri".registry]
-         config_path = ""
-         [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
-            [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
-                endpoint = ["https://docker.mirrors.sjtug.sjtu.edu.cn"]
+      
 ```
 
 Step 5：Enable the Systemd daemon for containerd
@@ -405,7 +402,7 @@ kubectl taint nodes master node-role.kubernetes.io/control-plane=:NoSchedule
 kubectl describe nodes master |grep Taints
 ```
 
-## 安装网络插件 Flannel（可选）
+## 安装网络插件 Flannel（可选网络插件，和Project Calico 必选一个）
 
 ```bash
 wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -427,7 +424,7 @@ kubectl apply -f tigera-operator.yaml
 kubectl apply -f custom-resources.yaml
 ```
 
-注意在创建资源前应保证 custom-resources.yaml 内 IPv4 地址配置应和 --pod-network-cidr 所指定的地址一致
+注意在创建资源前应保证 custom-resources.yaml 内 IPv4 地址配置应和 --pod-network-cidr 所指定的地址一致，部署Project Calico 使用 国内源见下面的IPv4/IPv6 双协议栈接入的 Kubernetes 集群
 
 ## 验证集群部署状态
 
@@ -473,6 +470,7 @@ kind: Installation
 metadata:
   name: default
 spec:
+  registry: 
   # Configures Calico networking.
   calicoNetwork:
     # Note: The ipPools section cannot be modified post-install.
